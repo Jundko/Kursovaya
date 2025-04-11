@@ -1,0 +1,16 @@
+import LoginPage from "./_components/input/LoginPage";
+
+export default function Home() {
+  return <LoginPage />;
+}
+
+
+
+// import { auth } from "~/server/auth";
+// import { api, HydrateClient } from "~/trpc/server";
+// import { Navbar } from "./_components/navbar";
+// import { SigninLink } from "./_components/signlink";
+
+// export default async function Home() {
+//   return <h1>Main page</h1>
+// }
