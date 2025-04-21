@@ -1,7 +1,6 @@
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { Navbar } from "./navbar";
-import { SigninLink } from "./signlink";
+
 
 export async function MyApp({
     children,
