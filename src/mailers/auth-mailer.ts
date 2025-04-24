@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 import { createTransport } from "nodemailer"
 import type { NodemailerConfig } from "next-auth/providers/nodemailer";
 

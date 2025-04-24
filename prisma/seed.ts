@@ -1,107 +1,118 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const ingredients = [
+  { name: "Салями" },
+  { name: "Руккола" },
+  { name: "Помидоры" },
+  { name: "Оливки" },
+  { name: "Острый перец" },
+  { name: "Лепёшка" },
+  { name: "Фарш" },
+  { name: "Свинина" },
+  { name: "Картофель-беби" },
+  { name: "Малиновый соус" },
+  { name: "Вяленые томаты" },
+  { name: "Моцарелла" },
+  { name: "Дикие брокколи" },
+  { name: "Сыр пармезан" },
+];
+
+const dishes = [
+  {
+    name: "Наслаждение",
+    price: 300,
+    ingredients: ['Салями', 'Руккола', 'Помидоры', 'Оливки'],
+  },
+  {
+    name: "Такос",
+    price: 250,
+    ingredients: ['Острый перец', 'Лепёшка', 'Фарш'],
+  },
+  {
+    name: "Портерхаус-стейк",
+    price: 450,
+    ingredients: ['Свинина', 'Картофель-беби', 'Малиновый соус'],
+  },
+  {
+    name: "Римская пицца",
+    price: 500,
+    ingredients: ['Вяленые томаты' , 'Моцарелла' , 'Дикие брокколи', 'Сыр пармезан'],
+  },
+];
+
 const users = [
   {
-    email: "ian@example.com",
-    firstname: "Ян",
-    surname: "Непомнящий",
-    group: "Группа 1",
+    email: "client1@example.com",
+    firstname: "Иван",
+    surname: "Иванов",
   },
   {
-    email: "vlad@example.com",
-    firstname: "Владислав",
-    surname: "Артемьев",
-    group: "Группа 1",
-  },
-  {
-    email: "dan@example.com",
-    firstname: "Даниил",
-    surname: "Дубов",
-    group: "Группа 1",
-  },
-  {
-    email: "sash@example.com",
-    firstname: "Александр",
-    surname: "Грищук",
-    group: "Группа 1",
-    subgroup: 2,
-  },
-  {
-    email: "ern@example.com",
-    firstname: "Эрнесто",
-    surname: "Инаркиев",
-    group: "Группа 2",
+    email: "client2@example.com",
+    firstname: "Павел",
+    surname: "Павелович",
   },
 ];
 
-const groups = [
-  {
-    name: "Группа 1",
-  },
-  {
-    name: "Группа 2",
-  },
-  {
-    name: "Группа 3",
-  },
-  {
-    name: "Группа 4",
-  },
-  {
-    name: "Группа 5",
-  },
-];
-
-const taskTypes = [
-  { name: "Лекция" },
-  { name: "Лабораторное занятие" },
-  { name: "Лабораторная работа" },
-];
-
-const tasks = [
-  "Лекция. Введение",
-  "Лекция. Среда разработки",
-  "Лекция. Время и пространство",
-];
-
-const squads = [
-  {
-    tutor: "Дубов",
-    students: [
-      ["Грищук", 2],
-      ["Дубов", 3],
-      ["Непомнящий", null],
-    ],
-  },
-  {
-    tutor: "Грищук",
-    students: [
-      ["Инаркиев", 2],
-      ["Дубов", 3],
-      ["Непомнящий", null],
-    ],
-  },
-];
 async function main() {
+  // Создаем ингредиенты
   await Promise.all(
-    groups.map(async (group) => {
-      await prisma.group.upsert({
-        where: { name: group.name },
+    ingredients.map(async (ingredient) => {
+      await prisma.ingredient.upsert({
+        where: { name: ingredient.name },
         update: {},
         create: {
-          name: group.name,
+          name: ingredient.name,
         },
       });
-    }),
+    })
   );
-  const groupsDB = await prisma.group.findMany();
+
+  // Создаем блюда и их составы
+  await Promise.all(
+    dishes.map(async (dish) => {
+      const createdDish = await prisma.dish.upsert({
+        where: { name: dish.name },
+        update: {},
+        create: {
+          name: dish.name,
+          price: dish.price,
+        },
+      });
+
+      // Добавляем ингредиенты для блюда
+      await Promise.all(
+        dish.ingredients.map(async (ingredientName) => {
+          const ingredient = await prisma.ingredient.findUnique({
+            where: { name: ingredientName },
+          });
+          if (ingredient) {
+            await prisma.composition.upsert({
+              where: {
+                composition_unique: {
+                  dishID: createdDish.id,
+                  ingredientID: ingredient.id,
+                },
+              },
+              update: {},
+              create: {
+                dishID: createdDish.id,
+                ingredientID: ingredient.id,
+              },
+            });
+          }
+        })
+      );
+    })
+  );
+
+  // Создаем пользователей
   await Promise.all(
     users.map(async (user) => {
-      const groupId = groupsDB.find((g) => g.name === user.group)?.id || "";
-      // console.log(groupId);
       await prisma.user.upsert({
         where: { email: user.email },
         update: {},
@@ -109,71 +120,64 @@ async function main() {
           email: user.email,
           firstname: user.firstname,
           surname: user.surname,
-          groupId: groupId,
-          subgroup: user.subgroup,
+          name: `${user.firstname} ${user.surname}`,
+          emailVerified: null,
+          image: null,
         },
       });
-    }),
+    })
   );
 
+  // Создаем корзины для пользователей
+  const allUsers = await prisma.user.findMany();
+  const allDishes = await prisma.dish.findMany();
+
   await Promise.all(
-    taskTypes.map(async (taskType) => {
-      await prisma.taskType.upsert({
-        where: { name: taskType.name },
+    allUsers.map(async (user, index) => {
+      const dish = allDishes[index % allDishes.length]; // Распределяем блюда по пользователям
+
+      if (!dish) {
+        throw new Error("Not enough dishes");
+      }
+
+      await prisma.cart.upsert({
+        where: {
+          user_dish_unique: {
+            userId: user.id,
+            dishID: dish.id,
+          },
+        },
         update: {},
         create: {
-          name: taskType.name,
+          userId: user.id,
+          dishID: dish.id,
+          count: 1 + (index % 2),
         },
       });
-    }),
+    })
   );
 
-  const lec = await prisma.taskType.findUnique({ where: { name: "Лекция" } });
+  // Создаем заказы
   await Promise.all(
-    tasks.map(async (task) => {
-      await prisma.task.upsert({
-        where: { name: task },
-        update: {},
-        create: {
-          name: task,
-          taskTypeId: lec?.id || "",
-        },
-      });
-    }),
-  );
-
-  const lec1 = await prisma.task.findUnique({
-    where: { name: "Лекция. Введение" },
-  });
-  await prisma.squad.deleteMany({});
-  await Promise.all(
-    squads.map(async (squad) => {
-      const tutor = await prisma.user.findFirstOrThrow({
-        where: { surname: squad.tutor },
-      });
-      const s = squad.students.map((s) => s[0]) as string[];
-      const students = await prisma.user.findMany({
-        where: { surname: { in: s } },
-      });
-      const sq = await prisma.squad.create({
+    allUsers.map(async (user) => {
+      const order = await prisma.order.create({
         data: {
-          taskId: lec1?.id || "",
-          tutorId: tutor.id,
-          date: new Date(),
+          userId: user.id,
         },
       });
-      await Promise.all(
-        students.map(async (student) => {
-          await prisma.studentsOnTasks.create({
-            data: {
-              studentId: student.id,
-              squadId: sq.id,
-            },
-          });
-        }),
-      );
-    }),
+
+      // Добавляем позиции в заказ
+      await prisma.orderPosition.create({
+        data: {
+          orderID: order.id,
+          dishID: allDishes[0]!.id, // Первое блюдо в заказе
+          count: 2,
+        },
+      });
+    })
   );
+
+  console.log("Seeding completed successfully!");
 }
 
 main()
@@ -181,7 +185,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    console.error("Error during seeding:", e);
     await prisma.$disconnect();
     process.exit(1);
   });

@@ -1,7 +1,6 @@
-import LoginPage from "./_components/input/LoginPage";
 
 export default function Home() {
-  return <LoginPage />;
+  // return <LoginPage />;
 }
 
 

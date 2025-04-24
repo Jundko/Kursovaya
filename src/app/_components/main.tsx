@@ -1,5 +1,7 @@
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
+import { SigninLink } from './signlink';
+import { Navbar } from './navbar';
 
 
 export async function MyApp({
@@ -9,9 +11,9 @@ export async function MyApp({
   
     return (
       <HydrateClient>
-        {/* <header>
-          { session ? <Navbar session={session} /> : <SigninLink /> }
-        </header> */}
+        <header>
+          { session ? <Navbar /> : <SigninLink /> }
+        </header>
         <main>
           { session ? children : "Not signed in" }
         </main>

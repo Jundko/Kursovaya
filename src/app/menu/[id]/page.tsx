@@ -31,7 +31,7 @@ const Food: Dish[] = [
     price: 250,
     rating: 4.5,
     imageUrl: '/tacos.png',
-    ingredients: ['Острый перец', 'лепёшка', 'фарш']
+    ingredients: ['Острый перец', 'Лепёшка', 'Фарш']
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const Food: Dish[] = [
     price: 450,
     rating: 4.5,
     imageUrl: '/meat.png',
-    ingredients: ['Свинина', 'картофель-беби', 'малиновый соус']
+    ingredients: ['Свинина', 'Картофель-беби', 'Малиновый соус']
   },
   {
     id: 4,
@@ -49,7 +49,7 @@ const Food: Dish[] = [
     price: 500,
     rating: 4.5,
     imageUrl: '/pizza1.png',
-    ingredients: ['Вяленые томаты' , 'моцарелла' , 'дикие брокколи', 'сыр пармезан']
+    ingredients: ['Вяленые томаты' , 'Моцарелла' , 'Дикие брокколи', 'Сыр пармезан']
   }
 ];
 
@@ -68,12 +68,10 @@ export default function DishDetails({ params }: { params: { id: string } }) {
     );
   }
 
-  const goBack = () => {
-    router.back();
-  };
+  const goBack = () => {router.back()};
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       
       <div className="flex-1 p-8">
@@ -82,13 +80,13 @@ export default function DishDetails({ params }: { params: { id: string } }) {
           {/* Заголовок и кнопка назад */}
           <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
             {/* Заголовок и кнопка назад */}
-            <div className="p-6 flex items-center gap-4"> {/* Изменено на flex с gap */}
+            <div className="p-6 flex items-center gap-4">
               <button onClick={goBack}className="text-gray-500 hover:text-orange-500 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>  
                 </svg>
               </button>
-              <h1 className="text-2xl font-bold text-black">{dish.title}</h1> {/* Убрал лишний div */}
+              <h1 className="text-2xl font-bold text-black">{dish.title}</h1> 
             </div>
           </div>
 
@@ -103,14 +101,14 @@ export default function DishDetails({ params }: { params: { id: string } }) {
 
           {/* Информация о блюде */}
           <div className="p-6">
-          <div className="flex justify-between items-start mb-4"> {/* items-start вместо items-center */}
+          <div className="flex justify-between items-start mb-4">
             <div>
               <span className="text-gray-600">Цена</span>
               <p className="text-xl text-black">{dish.price}₽</p>
             </div>
             <div>
               <span className="text-gray-600">Рейтинг</span>
-              <div className="flex items-center gap-1"> {/* Обертка только для цифры и звезды */}
+              <div className="flex items-center gap-1">
                 <p className="text-xl text-black">{dish.rating}</p>
                 <img src="/star-icon.svg" alt="Звездочка" className="w-5 h-5" />
               </div>
