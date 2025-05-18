@@ -28,14 +28,14 @@ export const basketRouter = createTRPCRouter({
       const { dishId } = input;
       const userId = ctx.session.user.id;
 
-      console.log("Поиск блюда с ID:", dishId); 
+      console.log("Поиск блюда с ID:", dishId); // Логируем ID блюда
 
       // Проверяем существование блюда
       const dish = await ctx.db.dish.findUnique({
         where: { id: dishId },
       });
 
-      console.log("Найденное блюдо:", dish); 
+      console.log("Найденное блюдо:", dish); // Логируем результат поиска
 
       if (!dish) {
         throw new TRPCError({
@@ -124,7 +124,7 @@ export const basketRouter = createTRPCRouter({
 
       const newCount = cartItem.count + delta;
       if (newCount <= 0) {
-        // Если количество стало 0 или меньше — запись удаляется
+        // Если количество стало 0 или меньше — удаляем запись
         await ctx.db.cart.delete({ where: { id: itemId } });
         return 0;
       } else {
