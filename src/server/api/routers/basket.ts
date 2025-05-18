@@ -1,4 +1,3 @@
-// В ~/server/api/routers/basket.ts
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
@@ -29,14 +28,14 @@ export const basketRouter = createTRPCRouter({
       const { dishId } = input;
       const userId = ctx.session.user.id;
 
-      console.log("Поиск блюда с ID:", dishId); // Логируем ID блюда
+      console.log("Поиск блюда с ID:", dishId); 
 
       // Проверяем существование блюда
       const dish = await ctx.db.dish.findUnique({
         where: { id: dishId },
       });
 
-      console.log("Найденное блюдо:", dish); // Логируем результат поиска
+      console.log("Найденное блюдо:", dish); 
 
       if (!dish) {
         throw new TRPCError({
@@ -125,7 +124,7 @@ export const basketRouter = createTRPCRouter({
 
       const newCount = cartItem.count + delta;
       if (newCount <= 0) {
-        // Если количество стало 0 или меньше — удаляем запись
+        // Если количество стало 0 или меньше — запись удаляется
         await ctx.db.cart.delete({ where: { id: itemId } });
         return 0;
       } else {
