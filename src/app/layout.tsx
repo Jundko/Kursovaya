@@ -16,7 +16,6 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
-
   if (!session) {
     return (
       <html lang="en" className={`${GeistSans.variable}`}>

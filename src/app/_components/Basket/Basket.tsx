@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -67,24 +68,14 @@ const Basket = () => {
               <p className="text-orange-500">{item.price} ₽</p>
             </div>
             <div className="flex items-center space-x-2">
-              <button 
-                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500" 
-                onClick={() => changeQuantity.mutate({ itemId: item.id, delta: -1 })}
-                aria-label="Уменьшить количество"
-              >
+              <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500" onClick={() => changeQuantity.mutate({ itemId: item.id, delta: -1 })} aria-label="Уменьшить количество">
                 <img src="/minus-icon.svg" alt="Minus" />
               </button>
               <span className="w-8 text-center">{String(item.quantity).padStart(2, '0')}</span>
-              <button 
-                className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white"
-                onClick={() => changeQuantity.mutate({ itemId: item.id, delta: 1 })}
-              >
+              <button className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white" onClick={() => changeQuantity.mutate({ itemId: item.id, delta: 1 })}>
                 <img src="/plus-icon.svg" alt="Plus" />
               </button>
-              <button 
-                className="ml-2 text-gray-400" 
-                onClick={() => removeItem.mutate({ itemId: item.id })}
-              >
+              <button className="ml-2 text-gray-400" onClick={() => removeItem.mutate({ itemId: item.id })}>
                 <img src="/delete-icon.svg" alt="Delete" />
               </button>
             </div>
@@ -106,11 +97,7 @@ const Basket = () => {
         </div>
       </div>
       <div className="p-6 w-full">
-        <button
-          className="mx-auto block w-80 bg-orange-500 text-white py-3 rounded-full hover:bg-orange-600 transition font-semibold"
-          onClick={() => buyMutation.mutate()}
-          disabled={buyMutation.status === 'pending'}
-        >
+        <button className="mx-auto block w-80 bg-orange-500 text-white py-3 rounded-full hover:bg-orange-600 transition font-semibold" onClick={() => buyMutation.mutate()} disabled={buyMutation.status === 'pending'}>
           {buyMutation.status === 'pending' ? "Оформление..." : "ОФОРМИТЬ"}
         </button>
       </div>

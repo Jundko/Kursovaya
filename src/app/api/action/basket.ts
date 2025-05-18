@@ -10,7 +10,7 @@ export const addToCart = async (dishId: string) => {
   const session = await auth();
   if (!session?.user?.id) return null;
 
-  // Проверяем, есть ли уже такое блюдо в корзине пользователя
+// Проверка есть ли у пользователя в корзине уже такое блюдо
   const existingCartItem = await prisma.cart.findFirst({
     where: {
       userId: session.user.id,
@@ -19,13 +19,13 @@ export const addToCart = async (dishId: string) => {
   });
 
   if (existingCartItem) {
-    // Если есть - увеличиваем количество
+// Если есть - увеличиваем количество
     await prisma.cart.update({
       where: { id: existingCartItem.id },
       data: { count: existingCartItem.count + 1 },
     });
   } else {
-    // Если нет - создаем новую запись
+// Если нет - создаем новую запись
     await prisma.cart.create({
       data: {
         userId: session.user.id,
@@ -50,7 +50,7 @@ export const getCartCount = async () => {
   return cartItems.reduce((sum: number, item) => sum + item.count, 0);
 };
 
-// Удаление товара из корзины (опционально)
+// Удаление товара из корзины
 export const removeFromCart = async (dishId: string) => {
   const session = await auth();
   if (!session?.user?.id) return null;

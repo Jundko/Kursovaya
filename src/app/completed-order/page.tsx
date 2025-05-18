@@ -13,10 +13,8 @@ export default function CompletedOrderPage() {
         </div>
         <h1 className="text-2xl font-medium mb-2">Ваш заказ успешно оформлен!</h1>
         <div className="mt-8">
-          <button
-            className="bg-orange-500 text-white py-3 px-8 rounded-full hover:bg-orange-600 transition font-medium"
-            onClick={() => router.push('/menu')}
-          >
+          <button className="bg-orange-500 text-white py-3 px-8 rounded-full hover:bg-orange-600 transition font-medium"
+            onClick={() => router.push('/menu')}>
             СДЕЛАТЬ НОВЫЙ
           </button>
         </div>

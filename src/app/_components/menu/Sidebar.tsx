@@ -13,10 +13,9 @@ const Sidebar = () => {
   const displayName = session?.user 
     ? [session.user.firstname, session.user.surname].filter(Boolean).join(' ') || session.user.name || "Пользователь"
     : "Пользователь";
-
-  if (!session) {
-    return null;
-  }
+    if (!session) {
+      return null;
+    }
 
   return (
     <aside className="w-64 bg-white border-r h-screen p-6 flex flex-col justify-between">

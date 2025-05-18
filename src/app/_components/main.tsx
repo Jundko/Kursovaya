@@ -1,6 +1,5 @@
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { Navbar } from './navbar';
 import PageLayout from './PageLayout';
 import { CartProvider } from "../_context/cart-context";
 import { SigninLink } from './signlink';
@@ -25,7 +24,6 @@ export async function MyApp({
             ) : (
               "Not signed in"
             )}
-          
         </div>
       </CartProvider>
     </HydrateClient>
