@@ -12,7 +12,6 @@ export const basketRouter = createTRPCRouter({
         dish: true, 
       },
     });
-
     return cartItems.map(item => ({
       id: item.id,
       name: item.dish.name,
@@ -28,14 +27,14 @@ export const basketRouter = createTRPCRouter({
       const { dishId } = input;
       const userId = ctx.session.user.id;
 
-      console.log("Поиск блюда с ID:", dishId); // Логируем ID блюда
+      console.log("Поиск блюда с ID:", dishId);
 
       // Проверяем существование блюда
       const dish = await ctx.db.dish.findUnique({
         where: { id: dishId },
       });
 
-      console.log("Найденное блюдо:", dish); // Логируем результат поиска
+      console.log("Найденное блюдо:", dish);
 
       if (!dish) {
         throw new TRPCError({
@@ -73,7 +72,6 @@ export const basketRouter = createTRPCRouter({
       const cartItems = await ctx.db.cart.findMany({
         where: { userId },
       });
-
       return cartItems.reduce((sum, item) => sum + item.count, 0);
     }),
 
@@ -83,7 +81,6 @@ export const basketRouter = createTRPCRouter({
     const cartItems = await ctx.db.cart.findMany({
       where: { userId },
     });
-
     return cartItems.reduce((sum, item) => sum + item.count, 0);
   }),
 
@@ -104,7 +101,6 @@ export const basketRouter = createTRPCRouter({
       const cartItems = await ctx.db.cart.findMany({
         where: { userId },
       });
-
       return cartItems.reduce((sum, item) => sum + item.count, 0);
     }),
 
@@ -142,7 +138,6 @@ export const basketRouter = createTRPCRouter({
       where: { userId },
       include: { dish: true },
     });
-
     if (cartItems.length === 0) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "Корзина пуста" });
     }

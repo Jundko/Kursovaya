@@ -34,7 +34,6 @@ export const addToCart = async (dishId: string) => {
       },
     });
   }
-
   return await getCartCount();
 };
 
@@ -46,7 +45,6 @@ export const getCartCount = async () => {
   const cartItems = await prisma.cart.findMany({
     where: { userId: session.user.id },
   });
-
   return cartItems.reduce((sum: number, item) => sum + item.count, 0);
 };
 
@@ -61,6 +59,5 @@ export const removeFromCart = async (dishId: string) => {
       dishID: dishId,
     },
   });
-
   return await getCartCount();
 };
