@@ -26,22 +26,30 @@ const dishes = [
   {
     name: "Наслаждение",
     price: 300,
+    description: "Салями, руккола, помидоры, оливки",
+    image: "pizza.png",
     ingredients: ['Салями', 'Руккола', 'Помидоры', 'Оливки'],
   },
   {
     name: "Такос",
     price: 250,
+    description: "Острый перец, лепёшка, фарш",
+    image: "tacos.png",
     ingredients: ['Острый перец', 'Лепёшка', 'Фарш'],
   },
   {
     name: "Портерхаус-стейк",
     price: 450,
+    description: "Свинина, картофель-беби, малиновый соус",
+    image: "meat.png",
     ingredients: ['Свинина', 'Картофель-беби', 'Малиновый соус'],
   },
   {
     name: "Римская пицца",
     price: 500,
-    ingredients: ['Вяленые томаты' , 'Моцарелла' , 'Дикие брокколи', 'Сыр пармезан'],
+    description: "Вяленые томаты, моцарелла, дикие брокколи, сыр пармезан",
+    image: "pizza1.png",
+    ingredients: ['Вяленые томаты', 'Моцарелла', 'Дикие брокколи', 'Сыр пармезан'],
   },
 ];
 
@@ -53,8 +61,8 @@ const users = [
   },
   {
     email: "client2@example.com",
-    firstname: "Павел",
-    surname: "Павелович",
+    firstname: "Сергей",
+    surname: "Сергеев",
   },
 ];
 
@@ -75,18 +83,14 @@ async function main() {
   // Создаем блюда и их составы
   await Promise.all(
     dishes.map(async (dish) => {
-      const createdDish = await prisma.dish.upsert({
-        where: { name: dish.name },
-        update: {},
-        create: {
-          name: dish.name,
-          price: dish.price,
-        },
+      const { ingredients: dishIngredients, ...dishData } = dish;
+      const createdDish = await prisma.dish.create({
+        data: dishData,
       });
 
       // Добавляем ингредиенты для блюда
       await Promise.all(
-        dish.ingredients.map(async (ingredientName) => {
+        dishIngredients.map(async (ingredientName) => {
           const ingredient = await prisma.ingredient.findUnique({
             where: { name: ingredientName },
           });

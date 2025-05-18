@@ -1,49 +1,30 @@
-import FoodDetails from '../FoodDetails/FoodDetails';
+"use client";
 
+import FoodCard from "./FoodCard";
+import { api } from "~/trpc/react";
 
-const Food = [
-  {
-    id: 1,
-    title: 'Наслаждение',
-    description: 'Салями, руккола, помидоры, оливки',
-    price: 300,
-    rating: 4.5,
-    imageUrl: 'pizza.png',
-  },
-  {
-    id: 2,
-    title: 'Такос',
-    description: 'Острый перец, лепёшка, фарш',
-    price: 250,
-    rating: 4.5,
-    imageUrl: 'tacos.png',
-  },
-  {
-    id: 3,
-    title: 'Портерхаус-стейк',
-    description: 'Свинина, картофель-беби, малиновый соус',
-    price: 450,
-    rating: 4.5,
-    imageUrl: 'meat.png',
-  },
-  {
-    id: 4,
-    title: 'Римская пицца',
-    description: 'Вяленые томаты, моцарелла, дикие брокколи, сыр пармезан',
-    price: 500,
-    rating: 4.5,
-    imageUrl: 'pizza1.png',
+const Menu = () => {
+  const { data: dishes = [], isLoading } = api.dish.getAll.useQuery();
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
   }
-];
-
-const MenuGrid = () => {
+  console.dir(dishes, { depth: 5 });
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-10">
-      {Food.map((item, index) => (
-        <FoodDetails key={index} {...item} />
+    <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {dishes.map((dish) => (
+        <FoodCard 
+          key={dish.id}
+          id={dish.id}
+          title={dish.name}
+          description={dish.description}
+          price={dish.price}
+          rating={4.5}
+          imageUrl={dish.image}
+        />
       ))}
     </div>
   );
 };
 
-export default MenuGrid;
+export default Menu;
